@@ -1,0 +1,781 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitStudent AI - Intelligence Blueprint</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f2fe;
+            --secondary: #4facfe;
+            --accent-glow: rgba(0, 242, 254, 0.4);
+            --bg-dark: #020617;
+            --glass: rgba(30, 41, 59, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
+            z-index: -1;
+            animation: rotate-bg 30s linear infinite;
+        }
+
+        @keyframes rotate-bg {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #app {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px var(--accent-glow));
+        }
+
+        header p {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            margin-bottom: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 242, 254, 0.3);
+            box-shadow: 0 35px 60px -15px rgba(0, 242, 254, 0.15);
+        }
+
+        h2,
+        h3 {
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2rem;
+            background: linear-gradient(to right, #fff, var(--text-dim));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .persona-card {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.1), rgba(79, 172, 254, 0.05));
+            border: 2px solid var(--primary);
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.1);
+        }
+
+        .score-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 242, 254, 0.1);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        #score-val {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .score-info {
+            text-align: left;
+        }
+
+        .score-info label {
+            font-size: 0.7rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .persona-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--primary);
+            letter-spacing: 4px;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        #persona-val {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(to bottom, #fff, var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 1rem 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .input-group label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--secondary);
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        input,
+        select {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 1.1rem;
+            border-radius: 1.2rem;
+            width: 100%;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+        }
+
+        .primary-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #020617;
+            border: none;
+            padding: 1.3rem;
+            border-radius: 1.2rem;
+            font-size: 1.2rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
+        }
+
+        .macro-display {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .macro-gauge-box {
+            text-align: center;
+        }
+
+        .macro-gauge-box span {
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--text-dim);
+            font-size: 0.7rem;
+        }
+
+        .bmi-value {
+            font-size: 5rem;
+            font-weight: 900;
+            margin: 1rem 0;
+            background: linear-gradient(135deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status-badge {
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            background: var(--success);
+            color: #020617;
+            display: inline-block;
+        }
+
+        .meta-info {
+            margin-top: 2rem;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .meta-info span {
+            color: var(--text-dim);
+        }
+
+        .meta-info strong {
+            color: var(--secondary);
+        }
+
+        .plans-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 3rem;
+        }
+
+        .plan-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .day-badge {
+            background: var(--primary);
+            color: #020617;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-weight: 800;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .activity-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .activity-tag {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 12px;
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            font-size: 0.9rem;
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .sub-card {
+            background: rgba(79, 172, 254, 0.1);
+            padding: 1rem;
+            border-radius: 1.5rem;
+            margin-top: 1rem;
+            border-left: 4px solid var(--secondary);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        @media (max-width: 768px) {
+            .macro-display {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .plans-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <header class="reveal">
+            <div class="logo">FitStudent <span>AI</span></div>
+            <p>Intelligence Core • Stable V3.0</p>
+        </header>
+
+        <main id="main-content">
+            <!-- CONTEXT & FEEDBACK TRIGGER -->
+            <section class="card reveal"
+                style="padding: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <label
+                        style="color:var(--secondary); font-size: 0.7rem; text-transform: uppercase; font-weight: 800;">Real-World
+                        Context</label>
+                    <div style="display:flex; gap: 1rem; margin-top: 0.5rem;">
+                        <select id="context-selector" style="margin-top:0; padding: 0.5rem 1rem; width: auto;">
+                            <option value="normal">Active Campus Life</option>
+                            <option value="exam">Exam Season (High Stress)</option>
+                            <option value="internship">Internship / Job Week</option>
+                            <option value="travel">Travel / On-the-Go</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="button" id="toggle-feedback" class="status-badge"
+                    style="cursor:pointer; background:rgba(0,242,254,0.1); color:var(--primary); border: 1px solid var(--primary);">+
+                    Weekly Feedback</button>
+            </section>
+
+            <!-- WEEKLY FEEDBACK MODAL/FORM (Hidden by default) -->
+            <section id="feedback-section" class="card reveal"
+                style="display:none; border:2px dashed var(--primary); background: rgba(0,242,254,0.05);">
+                <h3 style="color:var(--primary); text-transform:uppercase; letter-spacing:2px;">Neural Feedback Loop
+                </h3>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Current Weight (kg)</label>
+                        <input type="number" id="f-weight" placeholder="e.g. 72.5">
+                    </div>
+                    <div class="input-group">
+                        <label>Workout Completion %</label>
+                        <input type="number" id="f-workout" placeholder="0-100">
+                    </div>
+                    <div class="input-group">
+                        <label>Diet Adherence %</label>
+                        <input type="number" id="f-diet" placeholder="0-100">
+                    </div>
+                    <div class="input-group">
+                        <label>Energy Level</label>
+                        <select id="f-energy">
+                            <option value="high">High (Neural Peak)</option>
+                            <option value="medium" selected>Medium (Standard)</option>
+                            <option value="low">Low (Depleted)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Sleep Consistency</label>
+                        <select id="f-sleep">
+                            <option value="high">Consistent High</option>
+                            <option value="medium" selected>Varies</option>
+                            <option value="low">Irregular / Poor</option>
+                        </select>
+                    </div>
+                </div>
+                <p style="font-size:0.7rem; color:var(--text-dim); margin-top:1rem;">* This data will trigger the
+                    Continuous Learning Module to adapt your next blueprint.</p>
+            </section>
+
+            <section id="input-section" class="card reveal">
+                <h2>Intelligence Parameters</h2>
+                <form id="fitness-form">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Age</label>
+                            <input type="number" name="age" value="21" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Gender</label>
+                            <select name="gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Physique (Height/Weight)</label>
+                            <div style="display:flex; gap:0.5rem">
+                                <input type="number" name="height" placeholder="cm" value="178" required>
+                                <input type="number" name="weight" id="base-weight" placeholder="kg" value="72"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Activity Level</label>
+                            <select name="activity_level">
+                                <option value="sedentary">Sedentary</option>
+                                <option value="moderate" selected>Moderate</option>
+                                <option value="active">Active</option>
+                                <option value="very active">Very Active</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Stress & Sleep</label>
+                            <div style="display:flex; gap:0.5rem">
+                                <select name="stress_level">
+                                    <option value="low">Low Stress</option>
+                                    <option value="medium" selected>Med Stress</option>
+                                    <option value="high">High Stress</option>
+                                </select>
+                                <input type="number" name="sleep_duration" value="7" placeholder="Sleep hrs">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Goal</label>
+                            <select name="fitness_goal">
+                                <option value="weight loss">Weight Loss</option>
+                                <option value="muscle gain" selected>Muscle Gain</option>
+                                <option value="maintenance">Maintenance</option>
+                                <option value="overall fitness">Overall Fitness</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Time & Equipment</label>
+                            <div style="display:flex; gap:0.5rem">
+                                <input type="number" name="workout_time" value="45" placeholder="Min/day">
+                                <select name="cooking_equipment">
+                                    <option value="none" selected>No Kitchen</option>
+                                    <option value="induction">Induction</option>
+                                    <option value="full kitchen">Full Kitchen</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Environment</label>
+                            <div style="display:flex; gap:0.5rem; align-items:center;">
+                                <select name="living_condition">
+                                    <option value="hostel" selected>Hostel</option>
+                                    <option value="home">Home</option>
+                                    <option value="pg">PG</option>
+                                </select>
+                                <div
+                                    style="flex:1; background:rgba(255,255,255,0.05); padding:0.8rem; border-radius:1rem; border:1px solid var(--glass-border);">
+                                    <select name="diet_preference"
+                                        style="margin-top:0; background:none; border:none; padding:0;">
+                                        <option value="vegetarian">Veg Diet</option>
+                                        <option value="non-vegetarian" selected>Non-Veg Diet</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Budget Range</label>
+                            <select name="budget">
+                                <option value="low" selected>Student Budget (Low)</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">Premium</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="primary-btn">Initialize Neural Blueprint</button>
+                </form>
+            </section>
+
+            <section id="results-section" style="display:none;">
+                <!-- AI LEARNING SUMMARY & RISK DETECTOR -->
+                <div class="summary-grid"
+                    style="display:grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap:2rem; margin-bottom: 2.5rem;">
+                    <div class="card" style="border-left: 5px solid var(--primary);">
+                        <div class="persona-tag">Intelligence Core • Learning Summary</div>
+                        <div id="learning-output" style="margin-top: 1rem; font-size: 0.95rem;"></div>
+                    </div>
+                    <div id="risk-card" class="card"
+                        style="display:none; border-left: 5px solid var(--danger); background: rgba(239, 68, 68, 0.05);">
+                        <div class="persona-tag" style="color:var(--danger);">Risk Monitoring Alert</div>
+                        <div id="risk-output" style="margin-top: 1rem; font-size: 0.95rem; color: #fca5a5;"></div>
+                    </div>
+                </div>
+
+                <div class="card persona-card">
+                    <div class="persona-tag">Intelligence Blueprint • Persona</div>
+                    <h2 id="persona-val">--</h2>
+                    <p id="persona-expl"
+                        style="font-size: 0.9rem; color: var(--text-dim); margin-top:-1rem; margin-bottom: 1.5rem;">--
+                    </p>
+                    <p id="strategy-val" style="font-weight: 600; color: var(--primary);">--</p>
+
+                    <div class="score-container">
+                        <div class="score-circle"><span id="score-val">--</span></div>
+                        <div class="score-info">
+                            <label>Intelligence Score Evolution</label>
+                            <div style="display:flex; align-items:center; gap: 10px; margin-top: 5px;">
+                                <span id="score-change" style="font-weight:800; font-size: 1.2rem;">--</span>
+                                <small id="score-reason" style="color:var(--text-dim);"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-grid"
+                    style="display:grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap:2rem;">
+                    <div class="card">
+                        <h3>Intelligence Summary</h3>
+                        <div class="bmi-value" id="bmi-val">--</div>
+                        <div class="status-badge" id="bmi-cat">--</div>
+                        <div style="margin-top:2rem;">
+                            <label
+                                style="font-size:0.6rem; color:var(--text-dim); text-transform:uppercase;">Explainable
+                                AI Logic</label>
+                            <div id="ai-logic-box" class="sub-card" style="margin-top:0.5rem; font-size: 0.85rem;">
+                                <p id="logic-val"></p>
+                                <div id="trigger-badge" class="status-badge" style="font-size:0.5rem; margin-top:10px;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="meta-info">
+                            <span>Level: <strong id="level-val">--</strong></span>
+                            <span>Hydration: <strong id="hydro-val">--</strong> L/day</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Macro Target</h3>
+                        <div class="macro-display">
+                            <div class="macro-gauge-box">
+                                <svg width="100" height="100" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(0,242,254,0.1)"
+                                        stroke-width="8" />
+                                    <circle id="cal-gauge" cx="50" cy="50" r="45" fill="none" stroke="var(--primary)"
+                                        stroke-width="8" stroke-dasharray="283" stroke-dashoffset="283"
+                                        transform="rotate(-90 50 50)" />
+                                    <text id="cal-val" x="50" y="55" text-anchor="middle" fill="white" font-size="20"
+                                        font-weight="800">0</text>
+                                </svg>
+                                <span style="font-weight:800; letter-spacing:1px;">CALORIES</span>
+                            </div>
+                            <div class="macro-stats">
+                                <div class="plan-item" style="padding:0.6rem; margin-bottom:0.5rem;">
+                                    <small>PROTEIN</small><br><strong id="p-val">--</strong>g
+                                </div>
+                                <div class="plan-item" style="padding:0.6rem; margin-bottom:0.5rem;">
+                                    <small>CARBS</small><br><strong id="c-val">--</strong>g
+                                </div>
+                                <div class="plan-item" style="padding:0.6rem; margin-bottom:0.5rem;">
+                                    <small>FATS</small><br><strong id="f-val">--</strong>g
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="plans-container" style="margin-top: 2.5rem;">
+                    <div class="card">
+                        <h3>Workout Blueprint</h3>
+                        <div id="workout-list"></div>
+                        <div class="sub-card">
+                            <strong>🔄 Intelligent Workout Substitution</strong>
+                            <p id="work-swap" style="font-size:0.9rem; color:var(--text-dim);">--</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Dietary Blueprint</h3>
+                        <div id="diet-list"></div>
+                        <div class="sub-card">
+                            <strong>🔄 Dynamic Meal Substitution</strong>
+                            <p id="meal-swap" style="font-size:0.9rem; color:var(--text-dim);">--</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card reveal">
+                    <h3>Essential Shopping List</h3>
+                    <div id="shopping-list" class="tag-container"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // UI Interaction Logic
+        const toggleFeedbackBtn = document.getElementById('toggle-feedback');
+        const feedbackSection = document.getElementById('feedback-section');
+
+        toggleFeedbackBtn.addEventListener('click', () => {
+            const isHidden = feedbackSection.style.display === 'none';
+            feedbackSection.style.display = isHidden ? 'block' : 'none';
+            toggleFeedbackBtn.innerText = isHidden ? '− Close Feedback' : '+ Weekly Feedback';
+            toggleFeedbackBtn.style.background = isHidden ? 'rgba(239, 68, 68, 0.1)' : 'rgba(0,242,254,0.1)';
+            toggleFeedbackBtn.style.borderColor = isHidden ? 'var(--danger)' : 'var(--primary)';
+            toggleFeedbackBtn.style.color = isHidden ? 'var(--danger)' : 'var(--primary)';
+        });
+
+        document.getElementById('fitness-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Add Context
+            data.context = document.getElementById('context-selector').value;
+
+            // Add Feedback if active
+            if (feedbackSection.style.display !== 'none') {
+                data.weekly_feedback = {
+                    current_weight: Number(document.getElementById('f-weight').value) || data.weight,
+                    workout_completion: Number(document.getElementById('f-workout').value) || 100,
+                    diet_adherence: Number(document.getElementById('f-diet').value) || 100,
+                    energy_level: document.getElementById('f-energy').value,
+                    sleep_consistency: document.getElementById('f-sleep').value
+                };
+            }
+
+            const numericFields = ['age', 'height', 'weight', 'workout_time', 'sleep_duration'];
+            numericFields.forEach(field => data[field] = Number(data[field]));
+
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "Processing Intelligence Architecture...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('http://localhost:5000/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.error) throw new Error(result.error);
+                displayIntelligenceBlueprint(result);
+            } catch (err) {
+                alert("ML Engine Offline: " + err.message);
+                console.error(err);
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        function displayIntelligenceBlueprint(data) {
+            const resultsSection = document.getElementById('results-section');
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+
+            // 1. Learning Summary & Risks
+            document.getElementById('learning-output').innerHTML = data.learning_summary.map(s => `<p>• ${s}</p>`).join('');
+
+            const riskCard = document.getElementById('risk-card');
+            if (data.risks && data.risks.length > 0) {
+                riskCard.style.display = 'block';
+                document.getElementById('risk-output').innerHTML = data.risks.map(r => `<p>⚠ ${r}</p>`).join('');
+            } else {
+                riskCard.style.display = 'none';
+            }
+
+            // 2. Persona & Score Evolution
+            document.getElementById('persona-val').innerText = data.persona;
+            document.getElementById('persona-expl').innerText = data.persona_explanation;
+            document.getElementById('strategy-val').innerText = data.strategy;
+            document.getElementById('score-val').innerText = data.fitness_score;
+
+            const changeEl = document.getElementById('score-change');
+            const change = data.score_history.change;
+            changeEl.innerText = change >= 0 ? `+${change}` : change;
+            changeEl.style.color = change >= 0 ? 'var(--success)' : 'var(--danger)';
+            document.getElementById('score-reason').innerText = data.score_history.reason;
+
+            // 3. Intelligence Summary
+            document.getElementById('bmi-val').innerText = data.bmi_summary.bmi;
+            document.getElementById('bmi-cat').innerText = data.bmi_summary.category;
+            document.getElementById('level-val').innerText = data.predictions.fitness_level;
+            document.getElementById('hydro-val').innerText = data.hydration;
+
+            // 4. Explainable AI
+            document.getElementById('logic-val').innerText = data.explainable_ai.reasoning;
+            const triggerBadge = document.getElementById('trigger-badge');
+            triggerBadge.innerText = `Signal: ${data.explainable_ai.trigger}`;
+            triggerBadge.style.background = data.explainable_ai.trigger.includes('Feedback') ? 'var(--primary)' : 'rgba(255,255,255,0.1)';
+
+            // 5. Macros
+            const calVal = data.predictions.macros.calories;
+            document.getElementById('cal-val').textContent = calVal;
+            const offset = 283 - (283 * (Math.min(calVal, 3500) / 3500));
+            document.getElementById('cal-gauge').style.strokeDashoffset = offset;
+
+            document.getElementById('p-val').innerText = data.predictions.macros.protein;
+            document.getElementById('c-val').innerText = data.predictions.macros.carbs;
+            document.getElementById('f-val').innerText = data.predictions.macros.fats;
+
+            // 6. Plans
+            document.getElementById('workout-list').innerHTML = data.plans.workout.map(item => `
+                <div class="plan-item" style="border-left: 3px solid ${item.intensity === 'Recovery' ? 'var(--primary)' : 'rgba(255,255,255,0.1)'}">
+                    <span class="day-badge" style="background:${item.intensity === 'Recovery' ? 'var(--primary)' : 'var(--secondary)'}">${item.day}</span>
+                    <div class="activity-tags">${item.activities.map(a => `<span class="activity-tag">${a}</span>`).join('')}</div>
+                    <small style="color:var(--text-dim); display:block; margin-top:10px;">Intensity Level: ${item.intensity}</small>
+                </div>
+            `).join('');
+            document.getElementById('work-swap').innerText = data.plans.smart_substitutions.workout;
+
+            const meals = ['Breakfast', 'Lunch', 'Snack', 'Dinner'];
+            document.getElementById('diet-list').innerHTML = meals.map(meal => `
+                <div class="plan-item">
+                    <strong style="color:var(--secondary)">${meal}</strong>
+                    <p style="color:var(--text-dim); font-size:0.9rem; margin-top:5px;">${data.plans.diet[meal]}</p>
+                </div>
+            `).join('');
+            document.getElementById('meal-swap').innerText = data.plans.smart_substitutions.meal;
+
+            document.getElementById('shopping-list').innerHTML = data.plans.shopping_list
+                .map(item => `<span class="activity-tag">${item}</span>`).join('');
+        }
+    </script>
+</body>
+
+</html>
