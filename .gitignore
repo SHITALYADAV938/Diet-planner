@@ -7,7 +7,7 @@ __pycache__/
 venv/
 
 # Data and models
-models/
+# (Models are required for Streamlit deployment, so we include them in repo)
 
 # IDE/editor files
 .vscode/
