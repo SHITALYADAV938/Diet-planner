@@ -1,0 +1,10 @@
+# Root requirements for Streamlit Cloud deployment
+# Mirror of backend/requirements.txt
+
+flask
+flask-cors
+pandas
+numpy
+scikit-learn
+joblib
+streamlit>=1.28.0
